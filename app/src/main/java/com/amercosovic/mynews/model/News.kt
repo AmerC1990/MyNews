@@ -5,16 +5,28 @@ import com.google.gson.annotations.SerializedName
 
 data class News (
 
-    @SerializedName("title")
-    val newsTitle: String = "",
-
     @SerializedName("abstract")
-    val newsAbstract: String ="",
+    val newsAbstract: String,
+
+    @SerializedName("published_date")
+    val newsPublishedDate: String,
+
+    @SerializedName("title")
+    val newsTitle: String,
 
     @SerializedName("url")
-    val newsUrl: String = "",
-
-    @SerializedName("publishedDate")
-    val newsPublishedDate: Long = System.currentTimeMillis()
+    val newsUrl: String
 
 )
+
+data class NewsResponse (
+
+    @SerializedName("results")
+    val results: List<News>
+)
+
+
+
+
+
+
