@@ -13,7 +13,7 @@ import retrofit2.http.Query
 
 interface ApiInterface {
     @GET("svc/topstories/v2/home.json")
-    suspend fun getTopStories(@Query("api-key") api_key: String): List<NewsResponse>
+   suspend fun getTopStories(@Query("api-key") api_key: String): NewsResponse
 }
 
 

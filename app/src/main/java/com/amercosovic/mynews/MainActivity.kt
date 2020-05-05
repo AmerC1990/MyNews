@@ -1,70 +1,70 @@
 package com.amercosovic.mynews
 
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
+import android.view.Display
 import android.widget.Toast
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.amercosovic.mynews.model.News
-import com.amercosovic.mynews.model.NewsResponse
-import com.amercosovic.mynews.retrofit.ApiClient
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.amercosovic.mynews.retrofit.ApiClient.getClient
-import com.amercosovic.mynews.retrofit.ApiInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.Dispatchers.Unconfined
-import retrofit2.*
-import java.io.IOException
-
-//CoroutineScope(IO).launch {
-//    val result = getData()
-//    textview1.text = result.body.toString()
-//}
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import kotlinx.android.synthetic.main.news_row.view.*
 
 
-
+val TAG = "Check"
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        CoroutineScope(IO).launch {
-                try {
-                    val response = getData()
-                    textview1.text = response.toString()
-                } catch (e: HttpException) {
-                    textview1.text = e.toString()
-                }
-                }
 
+//        1st way of doing this
+        lifecycleScope.launch(IO) {
+            getNews()
+        }
+
+//        2nd way of doing this (COMMENT 1st way and then uncomment the below to see it)
+//        lifecycleScope.launch {
+//            textview1.text = getNewsByAsync().toString()
+    }
+
+
+    //1st way of doing this
+     suspend fun getNews() {
+        val newsResponse = getClient.getTopStories("G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
+        Log.d("amer", "${newsResponse.results.size}")
+
+        withContext(Main) {
+//            Toast.makeText(this@MainActivity, "API CALL IS SUCCESSFUL", Toast.LENGTH_LONG).show()
+            recyclerView.apply {
+                layoutManager = LinearLayoutManager(this@MainActivity)
+                adapter = NewsAdapter(newsResponse.results)
             }
 
-       suspend private fun getData() {
-            val call: List<NewsResponse> = ApiClient.getClient.getTopStories("G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
-            call.enqueue(object : Callback<NewsResponse> {
-
-                override fun onResponse(
-                    call: Call<NewsResponse>,
-                    response: Response<NewsResponse>
-                ) {
-                    Log.d("amer", "${response.body()}")
-                    Toast.makeText(this@MainActivity,"API CALL IS SUCESSFULL", Toast.LENGTH_LONG).show()
-                    textview1.text = response.body().toString()
-                }
-
-                override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, t.message,Toast.LENGTH_LONG).show()
-                }
-            })
+            }
         }
-        }
+    }
 
 
-
+        //
 //
+//
+//        }
+//    }
+//    2nd way of doing this
+//        private suspend fun getNewsByAsync(): NewsResponse {
+//            return lifecycleScope.async(IO) { getClient.getTopStories("G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")}
+//                .await()
+//        }
+//    }
+
 
 
