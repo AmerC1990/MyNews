@@ -1,10 +1,14 @@
 package com.amercosovic.mynews
 
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.MainThread
 import androidx.recyclerview.widget.RecyclerView
 import com.amercosovic.mynews.model.News
 import kotlinx.android.synthetic.main.news_row.view.*
@@ -23,7 +27,6 @@ class NewsAdapter(private val news: List<News>) : RecyclerView.Adapter<NewsAdapt
 //        Log.d("daniel", "phone number? ${user.phone}")
 //        holder.firstName.text = user.name
 //        holder.lastName.text = user.website
-
 
 
         holder.section.text = newsData.section.capitalize() + " > " + newsData.subsection.capitalize()
