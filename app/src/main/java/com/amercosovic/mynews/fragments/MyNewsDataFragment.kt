@@ -1,6 +1,5 @@
 package com.amercosovic.mynews.fragments
 
-import android.R.attr.defaultValue
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -11,20 +10,36 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.amercosovic.mynews.MainActivity.PATHS.MOST_POPULAR
+import com.amercosovic.mynews.MainActivity.PATHS.TOP_STORIES
 import com.amercosovic.mynews.NewsAdapter
 import com.amercosovic.mynews.R
+import com.amercosovic.mynews.model.NewsResponse
 import com.amercosovic.mynews.retrofit.ApiClient.getClient
 import kotlinx.android.synthetic.main.fragment_my_news_data.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.http.GET
 
 
 /**
  * A simple [Fragment] subclass.
  */
 class MyNewsDataFragment : Fragment() {
+
+    lateinit var RECEIVED_ENDPOINT: String
+
+    companion object {
+        val KEY_ENDPOINT = "key_endpoint"
+
+        fun newInstance(endPoint: String): MyNewsDataFragment {
+            val args = Bundle()
+            args.putString(KEY_ENDPOINT, endPoint)
+            val fragment = MyNewsDataFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -33,9 +48,11 @@ class MyNewsDataFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (getArguments() != null) {
-            val apiEndPoint = this.getArguments()?.getString("mostPopularPath")
+
+        arguments?.let { bundle ->
+            RECEIVED_ENDPOINT = bundle.getString(KEY_ENDPOINT, MOST_POPULAR)
         }
+
         Log.d("amer", "Fragment onCreate")
     }
 
@@ -59,15 +76,19 @@ class MyNewsDataFragment : Fragment() {
         super.onStart()
 
         lifecycleScope.launch(Dispatchers.IO) {
-            fetchNewsData()
+            fetchNewsData(RECEIVED_ENDPOINT)
         }
     }
 
-    suspend fun fetchNewsData() {
+    suspend fun fetchNewsData(receivedEndpoint: String) {
 
         try {
-            val result = getClient.getNewsData("G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
+            var result: NewsResponse? = null
 
+            when(receivedEndpoint){
+                TOP_STORIES -> result = getClient.getTopNews("G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
+                MOST_POPULAR -> result = getClient.getPopularNews("G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
+            }
 
             withContext(Dispatchers.Main) {
                 if (result != null) {

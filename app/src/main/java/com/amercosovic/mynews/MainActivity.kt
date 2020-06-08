@@ -9,31 +9,25 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.frame_layout, MyNewsDataFragment())
-            commit()
-        }
+        val fragment = MyNewsDataFragment.newInstance(TOP_STORIES)
+        replaceFragment(fragment)
 
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                if (tab?.text == "Top Stories") {
-                    supportFragmentManager.beginTransaction().apply {
-                        replace(R.id.frame_layout, MyNewsDataFragment())
-                        commit()
+                when (tab?.text) {
+                    "Top Stories" -> {
+                        val fragment = MyNewsDataFragment.newInstance(TOP_STORIES)
+                        replaceFragment(fragment)
                     }
-                } else if (tab?.text == "Most Popular") {
-                    val bundle = Bundle()
-                    val mostPopularPath = "svc/mostpopular/v2/viewed/1.jsonsvc/mostpopular/v2/viewed/1.json"
-                    bundle.putString("mostPopularPath", mostPopularPath)
-                    val fragInfo = MyNewsDataFragment()
-                    fragInfo.setArguments(bundle)
-                    supportFragmentManager.beginTransaction().apply {
-                        replace(R.id.frame_layout, fragInfo)
-                        commit()
+                    "Most Popular" -> {
+                        val fragment = MyNewsDataFragment.newInstance(MOST_POPULAR)
+                        replaceFragment(fragment)
                     }
                 }
             }
@@ -42,29 +36,21 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                if (tab?.text == "Most Popular") {
-                    supportFragmentManager.beginTransaction().apply {
-                        replace(R.id.frame_layout, MyNewsDataFragment())
-                        commit()
-                    }
-                } else if(tab?.text == "Top Stories") {
-                    supportFragmentManager.beginTransaction().apply {
-                        replace(R.id.frame_layout, MyNewsDataFragment())
-                        commit()
-                    }
-                }
-
-
-//        most_popular_tab.setOnClickListener{
-//            supportFragmentManager.beginTransaction().apply {
-//                replace(R.id.frame_layout, MostPopularFragment())
-//                commit()
-//            }
-//        }
-
 
             }
         })
+    }
+
+    private fun replaceFragment(fragment: MyNewsDataFragment) {
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame_layout, fragment)
+            commit()
+        }
+    }
+
+    companion object PATHS {
+        const val MOST_POPULAR = "most_popular"
+        const val TOP_STORIES = "top_stories"
     }
 }
 
