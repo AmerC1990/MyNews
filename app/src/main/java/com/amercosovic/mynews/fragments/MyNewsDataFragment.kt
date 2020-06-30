@@ -11,23 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amercosovic.mynews.MainActivity.PATHS.MOST_POPULAR
-import com.amercosovic.mynews.MainActivity.PATHS.SPORTS
 import com.amercosovic.mynews.MainActivity.PATHS.TOP_STORIES
-import com.amercosovic.mynews.adapters.MostPopularAdapter
-import com.amercosovic.mynews.adapters.NewsAdapter
+import com.amercosovic.mynews.NewsAdapter
 import com.amercosovic.mynews.R
-import com.amercosovic.mynews.adapters.SportsAdapter
-import com.amercosovic.mynews.model.MostPopular
 import com.amercosovic.mynews.model.NewsResponse
-import com.amercosovic.mynews.model.Sports
-import com.amercosovic.mynews.retrofit.ApiClient
 import com.amercosovic.mynews.retrofit.ApiClient.getClient
 import kotlinx.android.synthetic.main.fragment_my_news_data.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 
 
 /**
@@ -56,10 +48,11 @@ class MyNewsDataFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let { bundle ->
             RECEIVED_ENDPOINT = bundle.getString(KEY_ENDPOINT, MOST_POPULAR)
-            RECEIVED_ENDPOINT = bundle.getString(KEY_ENDPOINT, SPORTS)
         }
+
         Log.d("amer", "Fragment onCreate")
     }
 
@@ -91,44 +84,20 @@ class MyNewsDataFragment : Fragment() {
 
         try {
             var result: NewsResponse? = null
-            var mostPopularResult: MostPopular? = null
-            var sportsResult: Sports? = null
 
-
-            when (receivedEndpoint) {
+            when(receivedEndpoint){
                 TOP_STORIES -> result = getClient.getTopNews("G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
-                MOST_POPULAR -> mostPopularResult =
-                    getClient.getPopularNews("G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
-                SPORTS -> sportsResult = getClient.getSports("sports", "G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
+                MOST_POPULAR -> result = getClient.getPopularNews("G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
             }
-            withContext(Main) {
+
+            withContext(Dispatchers.Main) {
                 if (result != null) {
                     recyclerView.apply {
                         layoutManager = LinearLayoutManager(this@MyNewsDataFragment.context)
-                        adapter =
-                            NewsAdapter(result.results)
+                        adapter = NewsAdapter(result.results)
                     }
                 }
-                if (sportsResult != null) {
-                    sportsRecyclerView.apply {
-                        layoutManager = LinearLayoutManager(this@MyNewsDataFragment.context)
-                        adapter = SportsAdapter(
-                            sportsResult.response.docs
-                        )
-                    }
-                }
-                if (mostPopularResult != null) {
-                    mostPopularRecyclerView.apply {
-                        layoutManager = LinearLayoutManager(this@MyNewsDataFragment.context)
-                        adapter =
-                            MostPopularAdapter(
-                                mostPopularResult.results
-                            )
-                    }
-                }
-
             }
-
         } catch (e: Exception) {
             Log.e("Error", "Error occurred ${e.message}")
 
@@ -138,7 +107,9 @@ class MyNewsDataFragment : Fragment() {
                     .show()
             }
         }
+
     }
+
 
     override fun onResume() {
         Log.d("amer", "Fragment onResume")
