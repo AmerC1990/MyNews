@@ -15,6 +15,8 @@ data class News (
     val kicker: String,
     @SerializedName("material_type_facet")
     val materialTypeFacet: String,
+    @SerializedName("multimedia")
+    val multimedia: List<Multimedia>,
     @SerializedName("published_date")
     val publishedDate: String,
     @SerializedName("section")
