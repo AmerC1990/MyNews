@@ -12,14 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SearchActivity"
+        <activity android:name=".ResultsActivity"></activity>
+        <activity
+            android:name=".SearchActivity"
             android:label="Search Articles"
-            android:parentActivityName=".MainActivity"
-            >
-        </activity>
-        <activity android:name=".SecondActivity"
-            android:parentActivityName=".MainActivity"
-            />
+            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".SecondActivity"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
