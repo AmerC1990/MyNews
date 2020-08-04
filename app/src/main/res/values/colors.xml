@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#0AA6AC</color>
+    <color name="colorPrimary">#17B6C8</color>
     <color name="colorPrimaryDark">#0E767A</color>
     <color name="colorAccent">#000000</color>
     <color name="tabDefaultColor">#7BE9ED</color>
 
 
-
     <color name="AbstractFont">#FF585858</color>
+    <color name="ArticleReadColor">#AFF0F6</color>
+    <color name="NotificationColor">#E35C8A</color>
+    <color name="TabIndicatorColor">#FFEB3B</color>
+
 </resources>

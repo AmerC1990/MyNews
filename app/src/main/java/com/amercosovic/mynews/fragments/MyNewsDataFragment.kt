@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.amercosovic.mynews.MainActivity.PATHS.MOST_POPULAR
 import com.amercosovic.mynews.MainActivity.PATHS.SPORTS
 import com.amercosovic.mynews.MainActivity.PATHS.TOP_STORIES
+import com.amercosovic.mynews.R
 import com.amercosovic.mynews.adapters.MostPopularAdapter
 import com.amercosovic.mynews.adapters.NewsAdapter
-import com.amercosovic.mynews.R
 import com.amercosovic.mynews.adapters.SportsAdapter
 import com.amercosovic.mynews.model.MostPopular
 import com.amercosovic.mynews.model.NewsResponse
@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-
 /**
  * A simple [Fragment] subclass.
  */
@@ -40,6 +39,7 @@ class MyNewsDataFragment : Fragment() {
     companion object {
         val KEY_ENDPOINT = "key_endpoint"
 
+        // fun to pass EndPoint Instance to Fragment
         fun newInstance(endPoint: String): MyNewsDataFragment {
             val args = Bundle()
             args.putString(KEY_ENDPOINT, endPoint)
@@ -56,6 +56,7 @@ class MyNewsDataFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // get Key Endpoint from Main Activity
         arguments?.let { bundle ->
             RECEIVED_ENDPOINT = bundle.getString(KEY_ENDPOINT, MOST_POPULAR)
             RECEIVED_ENDPOINT = bundle.getString(KEY_ENDPOINT, SPORTS)
@@ -87,6 +88,9 @@ class MyNewsDataFragment : Fragment() {
         }
     }
 
+    // suspend function to make api call and populate recyclerview depending on if "top stories", "most
+    // popular" or "sports" tabs have been selected
+    // Key Endoint is passed as parameter to this fun
     suspend fun fetchNewsData(receivedEndpoint: String) {
 
         try {
@@ -99,7 +103,8 @@ class MyNewsDataFragment : Fragment() {
                 TOP_STORIES -> result = getClient.getTopNews("G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
                 MOST_POPULAR -> mostPopularResult =
                     getClient.getPopularNews("G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
-                SPORTS -> sportsResult = ApiClient.getClient.getSports("sports", "G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
+                SPORTS -> sportsResult =
+                    ApiClient.getClient.getSports("sports", "G9Xfi28dQn57YSw4gz11Smt0eBZumn6m")
             }
             withContext(Main) {
                 if (result != null) {
@@ -142,6 +147,7 @@ class MyNewsDataFragment : Fragment() {
 
     override fun onResume() {
         Log.d("amer", "Fragment onResume")
+
         super.onResume()
     }
 

@@ -8,7 +8,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-
 object ApiClient {
     //    var BASE_URL:String="https://api.nytimes.com/svc/topstories/v2/home.json?api-key=PFkuFrdSjRPRWnI0JSdnWOArzr5GuFZE"
     var BASE_URL: String = "https://api.nytimes.com/"

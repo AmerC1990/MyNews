@@ -7,18 +7,45 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="My News"
+        android:label="Newsr"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ResultsActivity"></activity>
+        <activity
+            android:name=".ReadNotifiedSearchedArticle"
+            android:label="Read Notified Article"
+            android:parentActivityName=".NotifiedSearchedNews"></activity>
+        <activity
+            android:name=".NotifiedSearchedNews"
+            android:label="Notified Searched News"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".ReadNotifiedArticle"
+            android:label="Read Notified Article"
+            android:parentActivityName=".NotifiedNews"></activity>
+        <activity
+            android:name=".NotifiedNews"
+            android:label="Notified News"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".NotificationsActivity"
+            android:label="Notifications">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.amercosovic.mynews.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ResultsActivity"
+            android:label="Search Results"
+            android:parentActivityName=".SearchActivity" />
         <activity
             android:name=".SearchActivity"
             android:label="Search Articles"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SecondActivity"
+            android:label="Read Article"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -27,6 +54,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".receiver.AlarmReceiver"
+            android:enabled="true" />
+
+        <receiver
+            android:name=".receiver.AlarmReceiver2"
+            android:enabled="true" />
     </application>
 
 </manifest>

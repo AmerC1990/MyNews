@@ -3,7 +3,7 @@ package com.amercosovic.mynews.model
 import com.google.gson.annotations.SerializedName
 
 
-data class News (
+data class News(
 
     @SerializedName("abstract")
     val `abstract`: String,
@@ -16,7 +16,7 @@ data class News (
     @SerializedName("material_type_facet")
     val materialTypeFacet: String,
     @SerializedName("multimedia")
-    val multimedia: List<Multimedia>,
+    var multimedia: List<Multimedia>,
     @SerializedName("published_date")
     val publishedDate: String,
     @SerializedName("section")
