@@ -40,7 +40,7 @@ class NewsAdapter(private val news: List<News>) : RecyclerView.Adapter<NewsAdapt
             holder.section.text =
                 newsData.section.capitalize() + " > " + newsData.subsection.capitalize()
         }
-        //
+
 
         else if (!newsData.section.isNullOrBlank() && newsData.section.startsWith("N") && newsData.subsection.isNullOrBlank()) {
             holder.section.text = "N.Y. Region"
@@ -54,15 +54,12 @@ class NewsAdapter(private val news: List<News>) : RecyclerView.Adapter<NewsAdapt
                 newsData.section.capitalize() + " > " + newsData.subsection.capitalize()
         }
 
-
         holder.title.text = newsData.title
         holder.publishedDate.text = newsData.publishedDate.subSequence(5, 7).toString() + "/" +
                 newsData.publishedDate.subSequence(8, 10).toString() + "/" +
                 newsData.publishedDate.subSequence(0, 4).toString()
-//        "https://static01.nyt.com/"
 
-
-        if (newsData.multimedia.isNullOrEmpty()) { //url.isEmpty()
+        if (newsData.multimedia.isNullOrEmpty()) {
             Picasso.with(holder.photo.context)
                 .load(R.drawable.worldnewsicon)
                 .placeholder(R.drawable.worldnewsicon)
@@ -72,9 +69,8 @@ class NewsAdapter(private val news: List<News>) : RecyclerView.Adapter<NewsAdapt
             Picasso.with(holder.photo.context)
                 .load(newsData.multimedia.toString().substringAfter("url=").substringBefore(","))
                 .error(R.drawable.worldnewsicon)
-                .into(holder.photo) //my ImageView
+                .into(holder.photo)
         }
-
         holder.itemView.setOnClickListener {
             val title: String = newsData.title
             val url: String = newsData.url.toString()
@@ -82,19 +78,6 @@ class NewsAdapter(private val news: List<News>) : RecyclerView.Adapter<NewsAdapt
             intent.putExtra("url", url)
             holder.itemView.context.startActivity(intent)
         }
-
-
-//      for (itemCount in news)
-//            if (holder.adapterPosition == 1) {
-//                holder.itemView.setBackgroundResource(R.color.ArticleReadColor)
-//            }
-//        if (holder.adapterPosition == 15) {
-//            holder.itemView.setBackgroundResource(R.color.ArticleReadColor)
-//        }
-//        if (holder.adapterPosition == 9) {
-//            holder.itemView.setBackgroundResource(R.color.ArticleReadColor)
-//        }
-
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

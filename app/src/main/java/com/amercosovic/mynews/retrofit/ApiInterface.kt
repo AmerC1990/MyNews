@@ -4,7 +4,9 @@ import com.amercosovic.dummynews2.modelwithmandatorysearchonly.MandatorySearchOn
 import com.amercosovic.mynews.model.MostPopular
 import com.amercosovic.mynews.model.NewsResponse
 import com.amercosovic.mynews.model.Sports
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiInterface {
@@ -19,211 +21,18 @@ interface ApiInterface {
     suspend fun getSports(@Query("q") query: String, @Query("api-key") api_key: String): Sports
 
     // For the results of the Search Articles
-
     @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith1Checkbox(
-        @Query("q") query: String, @Query("fq") category1: String,
+    suspend fun getSearchResult(
+        @Query("q", encoded = false) query: String ,
         @Query("api-key") api_key: String
     ): MandatorySearchOnly
 
+    // For the Notifications
     @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith2Checkbox(
-        @Query("q") query: String, @Query("fq") category1: String,
-        @Query("fq") category2: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith3Checkbox(
-        @Query("q") query: String, @Query("fq") category1: String,
-        @Query("fq") category2: String, @Query("fq") category3: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith4Checkbox(
-        @Query("q") query: String, @Query("fq") category1: String,
-        @Query("fq") category2: String, @Query("fq") category3: String,
-        @Query("fq") category4: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith5Checkbox(
-        @Query("q") query: String, @Query("fq") category1: String,
-        @Query("fq") category2: String, @Query("fq") category3: String,
-        @Query("fq") category4: String, @Query("fq") category5: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith6Checkbox(
-        @Query("q") query: String, @Query("fq") category1: String,
-        @Query("fq") category2: String, @Query("fq") category3: String,
-        @Query("fq") category4: String, @Query("fq") category5: String,
-        @Query("fq") category6: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    //
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith1CheckboxAndBeginDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
-        @Query("fq") category1: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith2CheckboxAndBeginDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith3CheckboxAndBeginDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith4CheckboxAndBeginDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String, @Query("fq") category4: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith5CheckboxAndBeginDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String, @Query("fq") category4: String,
-        @Query("fq") category5: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith6CheckboxAndBeginDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String, @Query("fq") category4: String,
-        @Query("fq") category5: String, @Query("fq") category6: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith1CheckboxAndEndDate(
-        @Query("q") query: String, @Query("end_date") end_date: String,
-        @Query("fq") category1: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith2CheckboxAndEndDate(
-        @Query("q") query: String, @Query("end_date") end_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith3CheckboxAndEndDate(
-        @Query("q") query: String, @Query("end_date") end_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith4CheckboxAndEndDate(
-        @Query("q") query: String, @Query("end_date") end_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String, @Query("fq") category4: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith5CheckboxAndEndDate(
-        @Query("q") query: String, @Query("end_date") end_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String, @Query("fq") category4: String,
-        @Query("fq") category5: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith6CheckboxAndEndDate(
-        @Query("q") query: String, @Query("end_date") end_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String, @Query("fq") category4: String,
-        @Query("fq") category5: String, @Query("fq") category6: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith1CheckboxBeginDateEndDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
+    suspend fun getSearchResultForNotification(
+        @Query("q", encoded = false) query: String ,
+        @Query("begin_date") begin_date: String,
         @Query("end_date") end_date: String,
-        @Query("fq") category1: String, @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith2CheckboxBeginDateEndDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
-        @Query("end_date") end_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
         @Query("api-key") api_key: String
     ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith3CheckboxBeginDateEndDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
-        @Query("end_date") end_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith4CheckboxBeginDateEndDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
-        @Query("end_date") end_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String, @Query("fq") category4: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith5CheckboxBeginDateEndDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
-        @Query("end_date") end_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String, @Query("fq") category4: String,
-        @Query("fq") category5: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
-    @GET("svc/search/v2/articlesearch.json")
-    suspend fun getSearchResultWith6CheckboxBeginDateEndDate(
-        @Query("q") query: String, @Query("begin_date") begin_date: String,
-        @Query("end_date") end_date: String,
-        @Query("fq") category1: String, @Query("fq") category2: String,
-        @Query("fq") category3: String, @Query("fq") category4: String,
-        @Query("fq") category5: String, @Query("fq") category6: String,
-        @Query("api-key") api_key: String
-    ): MandatorySearchOnly
-
 }
-
-
-// SPORTS
-//https://api.nytimes.com/svc/search/v2/articlesearch.json?q=sports&api-key=G9Xfi28dQn57YSw4gz11Smt0eBZumn6m
-
-//MOST POPULAR
-//https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=G9Xfi28dQn57YSw4gz11Smt0eBZumn6m
-
-
-// TOP STORIES
-//var BASE_URL:String="https://api.nytimes.com/svc/topstories/v2/home.json?api-key=G9Xfi28dQn57YSw4gz11Smt0eBZumn6m"

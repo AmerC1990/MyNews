@@ -7,8 +7,9 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.amercosovic.mynews.receiver.AlarmReceiver2
+import com.amercosovic.mynews.receiver.SearchNotificationsReceiver
 import kotlinx.android.synthetic.main.activity_search.*
 import java.util.*
 
@@ -44,7 +45,6 @@ class SearchActivity : AppCompatActivity() {
             val dpd = DatePickerDialog(
                 this,
                 DatePickerDialog.OnDateSetListener { view, Year, Month, Day ->
-                    // set to textView
                     val myDay = Day
                     val myMonth = Month + 1
                     val myYear = Year
@@ -58,21 +58,17 @@ class SearchActivity : AppCompatActivity() {
                     } else if (myDay >= 10 && myMonth >= 10) {
                         Enter_Begin_Date.text = "" + myDay + "/" + myMonth + "/" + myYear
                     }
-
                 },
                 year,
                 month,
                 day
             )
-            // show dialog
             dpd.show()
         }
-
         Enter_End_Date.setOnClickListener {
             val dpd = DatePickerDialog(
                 this,
                 DatePickerDialog.OnDateSetListener { view, Year, Month, Day ->
-                    // set to textView
                     val myDay = Day
                     val myMonth = Month + 1
                     val myYear = Year
@@ -92,7 +88,6 @@ class SearchActivity : AppCompatActivity() {
                 month,
                 day
             )
-            // show dialog
             dpd.show()
         }
 
@@ -102,197 +97,34 @@ class SearchActivity : AppCompatActivity() {
         searchButton.setOnClickListener {
             if (search_query_edittext.text.isNotEmpty() && atLeastOneCheckBoxChecked()) {
                 val searchQuery: String = search_query_edittext.text.toString()
-                val checkedCategories = getCheckedCategories()
-                val beginDate: String? = Enter_Begin_Date.text.toString()
+                val categoriesForNotification = getCheckedCategories().toString().replace("[","").replace("]","").replace(",","").replace(" ","")
+                    .replace("Politics", "\u0026fq=Politics").replace("Business", "\u0026fq=Business").replace("Entrepreneurs","\u0026fq=Entrepreneurs")
+                    .replace("Arts","\u0026fq=Arts").replace("Travel","\u0026fq=Travel").replace("Sports","\u0026fq=Sports")
+                val categoriesForSearchResult = getCheckedCategories().toString().replace("[","").replace("]","").replace(",","").replace(" ","")
+                    .replace("Politics", "&fq=Politics").replace("Business", "&fq=Business").replace("Entrepreneurs","&fq=Entrepreneurs")
+                    .replace("Arts","&fq=Arts").replace("Travel","&fq=Travel").replace("Sports","&fq=Sports")
+                var beginDate: String? = "&begin_date=" + Enter_Begin_Date.text.toString()
                     .substringAfterLast("/") + Enter_Begin_Date.text.toString()?.substringAfter("/")
                     ?.substringBefore("/") +
                         Enter_Begin_Date.text.toString()?.substringBefore("/")
-                val endDate: String? = Enter_End_Date.text.toString()
+                var endDate: String? = "&end_date=" + Enter_End_Date.text.toString()
                     .substringAfterLast("/") + Enter_End_Date.text.toString()?.substringAfter("/")
                     ?.substringBefore("/") +
                         Enter_End_Date.text.toString()?.substringBefore("/")
-                if (checkedCategories.count() == 1) {
-                    val sharedPreferences =
-                        getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-                    val editor = sharedPreferences.edit()
-                    cancelAlarm()
-                    editor.apply {
-                        remove("QUERYSEARCH")
-                        remove("CATEGORY1SEARCH")
-                        remove("CATEGORY2SEARCH")
-                        remove("CATEGORY3SEARCH")
-                        remove("CATEGORY4SEARCH")
-                        remove("CATEGORY5SEARCH")
-                        remove("CATEGORY6SEARCH")
-                        remove("BEGINDATEANDENDDATESEARCH")
-                        putString("QUERYSEARCH", searchQuery)
-                        putString("CATEGORY1SEARCH", checkedCategories.component1())
-                    }.apply()
-                    setAlarm()
-                    val intent = Intent(this@SearchActivity, ResultsActivity::class.java)
-                    intent.putExtra("query", searchQuery)
-                    intent.putStringArrayListExtra(
-                        "checkedCategories",
-                        ArrayList(checkedCategories)
-                    )
-                    intent.putExtra("beginDate", beginDate)
-                    intent.putExtra("endDate", endDate)
-                    startActivity(intent)
-                } else if (checkedCategories.count() == 2) {
-                    val sharedPreferences =
-                        getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-                    val editor = sharedPreferences.edit()
-                    cancelAlarm()
-                    editor.apply {
-                        remove("QUERYSEARCH")
-                        remove("CATEGORY1SEARCH")
-                        remove("CATEGORY2SEARCH")
-                        remove("CATEGORY3SEARCH")
-                        remove("CATEGORY4SEARCH")
-                        remove("CATEGORY5SEARCH")
-                        remove("CATEGORY6SEARCH")
-                        remove("BEGINDATEANDENDDATESEARCH")
-                        putString("QUERYSEARCH", searchQuery)
-                        putString("CATEGORY1SEARCH", checkedCategories.component1())
-                        putString("CATEGORY2SEARCH", checkedCategories.component2())
-                    }.apply()
-                    setAlarm()
-                    val intent = Intent(this@SearchActivity, ResultsActivity::class.java)
-                    intent.putExtra("query", searchQuery)
-                    intent.putStringArrayListExtra(
-                        "checkedCategories",
-                        ArrayList(checkedCategories)
-                    )
-                    intent.putExtra("beginDate", beginDate)
-                    intent.putExtra("endDate", endDate)
-                    startActivity(intent)
-                } else if (checkedCategories.count() == 3) {
-                    val sharedPreferences =
-                        getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-                    val editor = sharedPreferences.edit()
-                    cancelAlarm()
-                    editor.apply {
-                        remove("QUERYSEARCH")
-                        remove("CATEGORY1SEARCH")
-                        remove("CATEGORY2SEARCH")
-                        remove("CATEGORY3SEARCH")
-                        remove("CATEGORY4SEARCH")
-                        remove("CATEGORY5SEARCH")
-                        remove("CATEGORY6SEARCH")
-                        remove("BEGINDATEANDENDDATESEARCH")
-                        putString("QUERYSEARCH", searchQuery)
-                        putString("CATEGORY1SEARCH", checkedCategories.component1())
-                        putString("CATEGORY2SEARCH", checkedCategories.component2())
-                        putString("CATEGORY3SEARCH", checkedCategories.component3())
-                    }.apply()
-                    setAlarm()
-                    val intent = Intent(this@SearchActivity, ResultsActivity::class.java)
-                    intent.putExtra("query", searchQuery)
-                    intent.putStringArrayListExtra(
-                        "checkedCategories",
-                        ArrayList(checkedCategories)
-                    )
-                    intent.putExtra("beginDate", beginDate)
-                    intent.putExtra("endDate", endDate)
-                    startActivity(intent)
-                } else if (checkedCategories.count() == 4) {
-                    val sharedPreferences =
-                        getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-                    val editor = sharedPreferences.edit()
-                    cancelAlarm()
-                    editor.apply {
-                        remove("QUERYSEARCH")
-                        remove("CATEGORY1SEARCH")
-                        remove("CATEGORY2SEARCH")
-                        remove("CATEGORY3SEARCH")
-                        remove("CATEGORY4SEARCH")
-                        remove("CATEGORY5SEARCH")
-                        remove("CATEGORY6SEARCH")
-                        remove("BEGINDATEANDENDDATESEARCH")
-                        putString("QUERYSEARCH", searchQuery)
-                        putString("CATEGORY1SEARCH", checkedCategories.component1())
-                        putString("CATEGORY2SEARCH", checkedCategories.component2())
-                        putString("CATEGORY3SEARCH", checkedCategories.component3())
-                        putString("CATEGORY4SEARCH", checkedCategories.component4())
-                    }.apply()
-                    setAlarm()
-                    val intent = Intent(this@SearchActivity, ResultsActivity::class.java)
-                    intent.putExtra("query", searchQuery)
-                    intent.putStringArrayListExtra(
-                        "checkedCategories",
-                        ArrayList(checkedCategories)
-                    )
-                    intent.putExtra("beginDate", beginDate)
-                    intent.putExtra("endDate", endDate)
-                    startActivity(intent)
-                } else if (checkedCategories.count() == 5) {
-                    val sharedPreferences =
-                        getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-                    val editor = sharedPreferences.edit()
-                    cancelAlarm()
-                    editor.apply {
-                        remove("QUERYSEARCH")
-                        remove("CATEGORY1SEARCH")
-                        remove("CATEGORY2SEARCH")
-                        remove("CATEGORY3SEARCH")
-                        remove("CATEGORY4SEARCH")
-                        remove("CATEGORY5SEARCH")
-                        remove("CATEGORY6SEARCH")
-                        remove("BEGINDATEANDENDDATESEARCH")
-                        putString("QUERYSEARCH", searchQuery)
-                        putString("CATEGORY1SEARCH", checkedCategories.component1())
-                        putString("CATEGORY2SEARCH", checkedCategories.component2())
-                        putString("CATEGORY3SEARCH", checkedCategories.component3())
-                        putString("CATEGORY4SEARCH", checkedCategories.component4())
-                        putString("CATEGORY5SEARCH", checkedCategories.component5())
-                    }.apply()
-                    setAlarm()
-                    val intent = Intent(this@SearchActivity, ResultsActivity::class.java)
-                    intent.putExtra("query", searchQuery)
-                    intent.putStringArrayListExtra(
-                        "checkedCategories",
-                        ArrayList(checkedCategories)
-                    )
-                    intent.putExtra("beginDate", beginDate)
-                    intent.putExtra("endDate", endDate)
-                    startActivity(intent)
-                } else if (checkedCategories.count() == 6) {
-                    val sharedPreferences =
-                        getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-                    val editor = sharedPreferences.edit()
-                    cancelAlarm()
-                    editor.apply {
-                        remove("QUERYSEARCH")
-                        remove("CATEGORY1SEARCH")
-                        remove("CATEGORY2SEARCH")
-                        remove("CATEGORY3SEARCH")
-                        remove("CATEGORY4SEARCH")
-                        remove("CATEGORY5SEARCH")
-                        remove("CATEGORY6SEARCH")
-                        remove("BEGINDATEANDENDDATESEARCH")
-                        putString("QUERYSEARCH", searchQuery)
-                        putString("CATEGORY1SEARCH", checkedCategories.component1())
-                        putString("CATEGORY2SEARCH", checkedCategories.component2())
-                        putString("CATEGORY3SEARCH", checkedCategories.component3())
-                        putString("CATEGORY4SEARCH", checkedCategories.component4())
-                        putString("CATEGORY5SEARCH", checkedCategories.component5())
-                        putString("CATEGORY6SEARCH", checkedCategories.last())
-                    }.apply()
-                    setAlarm()
-                    val intent = Intent(this@SearchActivity, ResultsActivity::class.java)
-                    intent.putExtra("query", searchQuery)
-                    intent.putStringArrayListExtra(
-                        "checkedCategories",
-                        ArrayList(checkedCategories)
-                    )
-                    intent.putExtra("beginDate", beginDate)
-                    intent.putExtra("endDate", endDate)
-                    startActivity(intent)
-                }
-
-            }
+                        if (beginDate?.contains("0") == false) {
+                            beginDate = ""
+                        }
+                        if (endDate?.contains("0") == false) {
+                            endDate = ""
+                        }
+                        val queryForSearchResult = searchQuery + beginDate + endDate + categoriesForSearchResult
+                        val queryForSearchNotification = searchQuery + categoriesForNotification
+                        saveQueryCancelAndResetAlarm(queryForSearchNotification)
+                        val intent = Intent(this@SearchActivity, ResultsActivity::class.java)
+                        intent.putExtra("query", queryForSearchResult)
+                        startActivity(intent)
+                    }
         }
-
     }
 
     private fun getCheckedCategories(): List<String> = listOfNotNull(
@@ -306,32 +138,25 @@ class SearchActivity : AppCompatActivity() {
 
     private fun atLeastOneCheckBoxChecked() = getCheckedCategories().isNotEmpty()
 
+    // create set alarm fun and set Alarm Clock to every 24 hours
     private fun setAlarm() {
         alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, AlarmReceiver2::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+        val intent = Intent(this, SearchNotificationsReceiver::class.java)
+        val pendingIntent =
+            PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent2 =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
 
-        // Setting the specific time for the alarm manager to trigger the intent, here, the alarm is going off at 11:59 everyday
-//        val calendar = Calendar.getInstance()
-//        calendar.timeInMillis = System.currentTimeMillis()
-//        calendar.set(Calendar.HOUR,6)
-//        calendar.set(Calendar.MINUTE,2)
-//        calendar.set(Calendar.SECOND,30)
-
-        var firstTime = SystemClock.elapsedRealtime()
-        firstTime += (30 * 1000).toLong()
-
-//         Starts the alarm manager
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
+        val myAlarm = AlarmManager.AlarmClockInfo(
             System.currentTimeMillis() + 86400000,
-            pendingIntent
+            pendingIntent2
         )
+        alarmManager.setAlarmClock(myAlarm, pendingIntent)
     }
 
     private fun cancelAlarm() {
         alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, AlarmReceiver2::class.java)
+        val intent = Intent(this, SearchNotificationsReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
 
         alarmManager.cancel(pendingIntent)
@@ -350,6 +175,20 @@ class SearchActivity : AppCompatActivity() {
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(notificationChannel)
         }
+    }
+
+    private fun saveQueryCancelAndResetAlarm(queryForSearchNotification: String) {
+        cancelAlarm()
+        val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.apply {
+            remove("SEARCHNOTIFICATION")
+            remove("QUERYSEARCH")
+            remove("BEGINDATEANDENDDATESEARCH")
+            putString("SEARCHNOTIFICATION",queryForSearchNotification)
+        }
+        .apply()
+        setAlarm()
     }
 }
 

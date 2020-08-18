@@ -2,6 +2,7 @@ package com.amercosovic.mynews.adapters
 
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,24 +29,6 @@ class NotifiedNewsAdapter(private val notifiedNewsResults: List<Doc>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val notifiedNewsData = notifiedNewsResults[position]
-
-
-//        if (searchResultsData.sectionName.isNotEmpty() && searchResultsData.subsectionName.isNullOrBlank()) {
-//            holder.section.text = searchResultsData.sectionName.capitalize()
-//        }
-//        if (holder.section.text.startsWith('U')) {
-//            holder.section.text = "U.S."
-//        }
-//        if (holder.section.text.startsWith('N')) {
-//            holder.section.text = "N.Y. Region"
-//        }
-//        if (holder.section.text.contains("&")) {
-//            holder.section.text = searchResultsData.sectionName.capitalize().substringBefore("&")
-//        }
-//        if (!searchResultsData.sectionName.isNullOrBlank() && !searchResultsData.subsectionName.isNullOrBlank()) {
-//            holder.section.text = searchResultsData.sectionName.capitalize() + " > " +
-//                    searchResultsData.subsectionName.capitalize()
-//        }
 
         if (!notifiedNewsData.sectionName.isNullOrBlank() && notifiedNewsData.sectionName.contains(
                 "us"
@@ -98,11 +81,10 @@ class NotifiedNewsAdapter(private val notifiedNewsResults: List<Doc>) :
         }
 
         holder.title.text = notifiedNewsData.headline.main.toString()
-
         holder.publishedDate.text = notifiedNewsData.pubDate.subSequence(5, 7).toString() + "/" +
                 notifiedNewsData.pubDate.subSequence(8, 10).toString() + "/" +
                 notifiedNewsData.pubDate.subSequence(0, 4).toString()
-//        "https://static01.nyt.com/"
+
 
 
         if (notifiedNewsData.multimedia.isNullOrEmpty()) { //url.isEmpty()
@@ -120,24 +102,12 @@ class NotifiedNewsAdapter(private val notifiedNewsResults: List<Doc>) :
                 .error(R.drawable.worldnewsicon)
                 .into(holder.photo) //this is your ImageView
         }
-//
-//        Log.d("amer", "SEARCH: ${searchResultsData.multimedia.toString().substringAfter("url=").substringBefore(",")}")
-
-
         holder.itemView.setOnClickListener {
             val url: String = notifiedNewsData.webUrl.toString()
             val intent = Intent(holder.itemView.context, ReadNotifiedArticle::class.java)
             intent.putExtra("url", url)
-//            holder.itemView.setBackgroundColor((Color.parseColor("#AFF0F6")))
             holder.itemView.context.startActivity(intent)
         }
-
-
-//        if (holder.itemView.isPressed) {
-//
-//        }
-
-
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

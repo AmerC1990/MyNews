@@ -63,9 +63,6 @@ class MostPopularAdapter(private val mostPopular: List<Result>) :
             mostPopularData.publishedDate.subSequence(5, 7).toString() + "/" +
                     mostPopularData.publishedDate.subSequence(8, 10).toString() + "/" +
                     mostPopularData.publishedDate.subSequence(0, 4).toString()
-//        https://static01.nyt.com/images/2020/06/18/sports/17virus-sportssummer-2/17virus-sportssummer-2-mediumSquareAt3X-v2.jpg
-//        https://static01.nyt.com/
-
 
         if (mostPopularData.media.isNullOrEmpty() || mostPopularData.media.filter { it.mediaMetadata != null }
                 .isNullOrEmpty()) { //url.isEmpty()
@@ -83,29 +80,13 @@ class MostPopularAdapter(private val mostPopular: List<Result>) :
                 .error(R.drawable.worldnewsicon)
                 .into(holder.photo)
         }
-
-
-//        Log.d("amer", "URL: ${sportsData.webUrl}")
-//        Log.d("amer", "URI: ${sportsData.uri}")
-//
-//        Log.d("amer", "MUL        Log.d("amer", "MULTIMEDIA$$$: ${"https://static01.nyt.com/" + sportsData.multimedia.filter { it.url.contains("images") }.toString().substringAfter("xlarge=").substringBefore(",")}")TIMEDIA$$$: ${sportsData.multimedia.filter { it.url.contains("images") } }}")
-        Log.d(
-            "amer",
-            "MULTIMEDIA$$$: ${mostPopularData.media.filter { it.mediaMetadata != null }.toString()
-                .substringAfter("url=").substringBefore(",")}"
-        )
-
-
         holder.itemView.setOnClickListener {
             val url: String = mostPopularData.url.toString()
             val intent = Intent(holder.itemView.context, SecondActivity::class.java)
             intent.putExtra("url", url)
             holder.itemView.context.startActivity(intent)
         }
-
-
     }
-
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val section: TextView = itemView.section
         val publishedDate: TextView = itemView.publishedDate

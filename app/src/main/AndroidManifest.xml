@@ -15,15 +15,15 @@
         <activity
             android:name=".ReadNotifiedSearchedArticle"
             android:label="Read Notified Article"
-            android:parentActivityName=".NotifiedSearchedNews"></activity>
+            android:parentActivityName=".NotifiedSearchedNews" />
         <activity
             android:name=".NotifiedSearchedNews"
             android:label="Notified Searched News"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ReadNotifiedArticle"
             android:label="Read Notified Article"
-            android:parentActivityName=".NotifiedNews"></activity>
+            android:parentActivityName=".NotifiedNews" />
         <activity
             android:name=".NotifiedNews"
             android:label="Notified News"
@@ -56,11 +56,10 @@
         </activity>
 
         <receiver
-            android:name=".receiver.AlarmReceiver"
+            android:name=".receiver.NotificationsReceiver"
             android:enabled="true" />
-
         <receiver
-            android:name=".receiver.AlarmReceiver2"
+            android:name=".receiver.SearchNotificationsReceiver"
             android:enabled="true" />
     </application>
 
