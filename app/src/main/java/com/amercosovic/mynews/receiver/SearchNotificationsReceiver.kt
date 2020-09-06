@@ -7,6 +7,9 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.SystemClock
 import android.util.Log
@@ -54,9 +57,9 @@ class SearchNotificationsReceiver : BroadcastReceiver() {
                             Intent(context, NotifiedSearchedNews::class.java), 0
                         )
                         val builder = NotificationCompat.Builder(context, "NotifySearch")
-                            .setSmallIcon(R.drawable.ic_baseline_notifications_active_24)
+                            .setSmallIcon(R.drawable.myapplogo)
                             .setContentTitle("New articles today from your previous search!")
-                            .setContentText("New Articles have been published today from your previous search")
+                            .setContentText("New articles have been published today from your previous search.")
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                             .setColor(Color.parseColor("#17B6C8"))
 

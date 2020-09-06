@@ -29,8 +29,6 @@
             android:paddingBottom="25dp"
             android:progressTint="#095760"
             android:secondaryProgressTint="#292626"
-            android:soundEffectsEnabled="true"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             app:layout_constraintBottom_toTopOf="@+id/webView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

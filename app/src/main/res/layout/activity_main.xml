@@ -36,6 +36,7 @@
         app:tabTextColor="@color/tabDefaultColor">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/top_stories_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#17B6C8"
@@ -49,6 +50,7 @@
             android:text="Most Popular" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/sports_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#17B6C8"

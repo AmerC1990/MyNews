@@ -29,13 +29,8 @@ class NotificationsReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
 
-
-        Log.d("amer", "Alarm Receiver Working")
-
-        val sdf2 = SimpleDateFormat("yyyy/MM/dd")
-        val currentTime = sdf2.format(Date())
-        val sdf3 = SimpleDateFormat("yyyyMMdd")
-        val apiCallDateFormat = sdf3.format(Date())
+        val dateFormat = SimpleDateFormat("yyyyMMdd")
+        val apiCallDateFormat = dateFormat.format(Date())
 
         // get shared prefs
         val sharedPreferences = context?.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
@@ -65,11 +60,12 @@ class NotificationsReceiver : BroadcastReceiver() {
                             Intent(context, NotifiedNews::class.java), 0
                         )
                         val builder = NotificationCompat.Builder(context, "amer")
-                            .setSmallIcon(R.drawable.ic_baseline_notifications_active_24)
-                            .setContentTitle("New Articles Today!")
-                            .setContentText("New Articles have been published today")
+                            .setSmallIcon(R.drawable.myapplogo)
+                            .setContentTitle("New articles today!")
+                            .setContentText("New articles have been published today.")
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                             .setColor(Color.parseColor("#17B6C8"))
+
 
                         builder.setContentIntent(contentIntent)
                         builder.setDefaults(Notification.DEFAULT_SOUND)

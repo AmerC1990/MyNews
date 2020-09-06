@@ -10,8 +10,10 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.amercosovic.mynews.receiver.SearchNotificationsReceiver
+import com.amercosovic.mynews.util.buildQueryForNotification
 import kotlinx.android.synthetic.main.activity_search.*
 import java.util.*
+import com.amercosovic.mynews.util.buildQueryForSearchResult
 
 class SearchActivity : AppCompatActivity() {
 
@@ -93,41 +95,18 @@ class SearchActivity : AppCompatActivity() {
 
 //       if search button is clicked and form is filled out according to project brief,
         // save data to shared prefs and send data to results activity / open results activity
-
         searchButton.setOnClickListener {
             if (search_query_edittext.text.isNotEmpty() && atLeastOneCheckBoxChecked()) {
-                val searchQuery: String = search_query_edittext.text.toString()
-                val categoriesForNotification = getCheckedCategories().toString().replace("[","").replace("]","").replace(",","").replace(" ","")
-                    .replace("Politics", "\u0026fq=Politics").replace("Business", "\u0026fq=Business").replace("Entrepreneurs","\u0026fq=Entrepreneurs")
-                    .replace("Arts","\u0026fq=Arts").replace("Travel","\u0026fq=Travel").replace("Sports","\u0026fq=Sports")
-                val categoriesForSearchResult = getCheckedCategories().toString().replace("[","").replace("]","").replace(",","").replace(" ","")
-                    .replace("Politics", "&fq=Politics").replace("Business", "&fq=Business").replace("Entrepreneurs","&fq=Entrepreneurs")
-                    .replace("Arts","&fq=Arts").replace("Travel","&fq=Travel").replace("Sports","&fq=Sports")
-                var beginDate: String? = "&begin_date=" + Enter_Begin_Date.text.toString()
-                    .substringAfterLast("/") + Enter_Begin_Date.text.toString()?.substringAfter("/")
-                    ?.substringBefore("/") +
-                        Enter_Begin_Date.text.toString()?.substringBefore("/")
-                var endDate: String? = "&end_date=" + Enter_End_Date.text.toString()
-                    .substringAfterLast("/") + Enter_End_Date.text.toString()?.substringAfter("/")
-                    ?.substringBefore("/") +
-                        Enter_End_Date.text.toString()?.substringBefore("/")
-                        if (beginDate?.contains("0") == false) {
-                            beginDate = ""
-                        }
-                        if (endDate?.contains("0") == false) {
-                            endDate = ""
-                        }
-                        val queryForSearchResult = searchQuery + beginDate + endDate + categoriesForSearchResult
-                        val queryForSearchNotification = searchQuery + categoriesForNotification
-                        saveQueryCancelAndResetAlarm(queryForSearchNotification)
-                        val intent = Intent(this@SearchActivity, ResultsActivity::class.java)
-                        intent.putExtra("query", queryForSearchResult)
-                        startActivity(intent)
+                saveQueryCancelAndResetAlarm(buildQueryForNotification(searchQuery = search_query_edittext.text.toString(),categories = getCheckedCategories()))
+                val intent = Intent(this@SearchActivity, ResultsActivity::class.java)
+                intent.putExtra("query",  buildQueryForSearchResult(searchQuery = search_query_edittext.text.toString(),enterBeginDate = Enter_Begin_Date.text.toString(),enterEndDate = Enter_End_Date.text.toString(),categories = getCheckedCategories()))
+                Log.d("checkdates", " enter begin date: $Enter_Begin_Date, enter end date: $Enter_End_Date, altered begin date: $Enter_Begin_Date")
+                startActivity(intent)
                     }
         }
     }
 
-    private fun getCheckedCategories(): List<String> = listOfNotNull(
+     private fun getCheckedCategories(): List<String> = listOfNotNull(
         "Travel".takeIf { TravelTextBox.isChecked },
         "Sports".takeIf { SportsTextBox.isChecked },
         "Politics".takeIf { PoliticsTextBox.isChecked },

@@ -22,10 +22,11 @@ class ResultsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_results)
 
         // get bundle, and if bundle is NOT empty,  API call and display data in
-        // reyclerview --- if api call result is empty or null, show dialog box informing user
+        // recyclerview --- if api call result is empty or null, show dialog box informing user
 
         val bundle: Bundle? = intent.extras
         val query = bundle!!.getString("query")
+
 
         if (!query.isNullOrEmpty()) {
                         lifecycleScope.launch(IO) {

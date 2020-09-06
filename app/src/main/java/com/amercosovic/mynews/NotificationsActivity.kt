@@ -11,7 +11,17 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.amercosovic.mynews.receiver.NotificationsReceiver
+import com.amercosovic.mynews.util.buildQueryForNotification
 import kotlinx.android.synthetic.main.activity_notifications.*
+import kotlinx.android.synthetic.main.activity_notifications.ArtsCheckBox
+import kotlinx.android.synthetic.main.activity_notifications.BusinessTextBox
+import kotlinx.android.synthetic.main.activity_notifications.EntrepreneursTextBox
+import kotlinx.android.synthetic.main.activity_notifications.PoliticsTextBox
+import kotlinx.android.synthetic.main.activity_notifications.SportsTextBox
+import kotlinx.android.synthetic.main.activity_notifications.TravelTextBox
+import kotlinx.android.synthetic.main.activity_notifications.search_query_edittext
+import kotlinx.android.synthetic.main.activity_search.*
+import org.jetbrains.annotations.TestOnly
 
 class NotificationsActivity : AppCompatActivity() {
 
@@ -32,6 +42,7 @@ class NotificationsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notifications)
+
         createNotificationChannel()
 
         actionBar?.setDisplayHomeAsUpEnabled(true)
@@ -79,12 +90,7 @@ class NotificationsActivity : AppCompatActivity() {
         enableNotificationsSwitch.setOnClickListener {
                 if (enableNotificationsSwitch.isChecked && search_query_edittext.text.isNotEmpty()
                     && atLeastOneCheckBoxChecked()) {
-                    val query = search_query_edittext.text.toString()
-                    val categories = getCheckedCategories().toString().replace("[","").replace("]","").replace(",","").replace(" ","")
-                        .replace("Politics", "\u0026fq=Politics").replace("Business", "\u0026fq=Business").replace("Entrepreneurs","\u0026fq=Entrepreneurs")
-                        .replace("Arts","\u0026fq=Arts").replace("Travel","\u0026fq=Travel").replace("Sports","\u0026fq=Sports")
-                    val queryForNotification = query + categories
-                            saveQueryAndSetAlarm(queryForNotification)
+                        saveQueryAndSetAlarm(buildQueryForNotification(searchQuery = search_query_edittext.text.toString(),categories = getCheckedCategories()))
                     }
                 else if (!enableNotificationsSwitch.isChecked) {
                 search_query_edittext.setText("")
@@ -162,7 +168,7 @@ class NotificationsActivity : AppCompatActivity() {
         alarmManager.cancel(pendingIntent)
     }
     // Check if at least one checkbox is checked
-    private fun getCheckedCategories(): List<String> = listOfNotNull(
+     private fun getCheckedCategories(): List<String> = listOfNotNull(
         "Travel".takeIf { TravelTextBox.isChecked },
         "Sports".takeIf { SportsTextBox.isChecked },
         "Politics".takeIf { PoliticsTextBox.isChecked },
@@ -181,4 +187,9 @@ class NotificationsActivity : AppCompatActivity() {
         .apply()
         setAlarm()
     }
+
+
+
+
+
 }
